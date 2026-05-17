@@ -1,8 +1,9 @@
-use crate::{
-    error::{XCapError, XCapResult},
-    video_recorder::Frame,
-};
+use crate::error::{XCapError, XCapResult};
 use image::RgbaImage;
+
+#[cfg(feature = "video-recorder")]
+use crate::video_recorder::Frame;
+#[cfg(feature = "video-recorder")]
 use std::sync::mpsc::Receiver;
 
 #[derive(Debug, Clone)]
@@ -79,6 +80,7 @@ impl ImplMonitor {
         Err(XCapError::NotSupported)
     }
 
+    #[cfg(feature = "video-recorder")]
     pub fn video_recorder(&self) -> XCapResult<(ImplVideoRecorder, Receiver<Frame>)> {
         Err(XCapError::NotSupported)
     }
@@ -149,9 +151,11 @@ impl ImplWindow {
     }
 }
 
+#[cfg(feature = "video-recorder")]
 #[derive(Debug, Clone)]
 pub struct ImplVideoRecorder;
 
+#[cfg(feature = "video-recorder")]
 impl ImplVideoRecorder {
     pub fn start(&self) -> XCapResult<()> {
         Err(XCapError::NotSupported)
@@ -166,6 +170,7 @@ pub mod impl_monitor {
     pub use super::ImplMonitor;
 }
 
+#[cfg(feature = "video-recorder")]
 pub mod impl_video_recorder {
     pub use super::ImplVideoRecorder;
 }

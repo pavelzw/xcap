@@ -1,5 +1,3 @@
-use std::sync::mpsc::Receiver;
-
 use image::RgbaImage;
 use objc2::MainThreadMarker;
 use objc2_app_kit::NSScreen;
@@ -11,12 +9,16 @@ use objc2_core_graphics::{
 };
 use objc2_foundation::{NSNumber, NSString};
 
-use crate::{
-    error::{XCapError, XCapResult},
-    video_recorder::Frame,
-};
+use crate::error::{XCapError, XCapResult};
 
-use super::{capture::capture, impl_video_recorder::ImplVideoRecorder};
+#[cfg(feature = "video-recorder")]
+use std::sync::mpsc::Receiver;
+#[cfg(feature = "video-recorder")]
+use crate::video_recorder::Frame;
+
+use super::capture::capture;
+#[cfg(feature = "video-recorder")]
+use super::impl_video_recorder::ImplVideoRecorder;
 
 #[derive(Debug, Clone)]
 pub(crate) struct ImplMonitor {
@@ -241,6 +243,7 @@ impl ImplMonitor {
         capture(cg_rect, CGWindowListOption::OptionAll, 0)
     }
 
+    #[cfg(feature = "video-recorder")]
     pub fn video_recorder(&self) -> XCapResult<(ImplVideoRecorder, Receiver<Frame>)> {
         ImplVideoRecorder::new(self.cg_direct_display_id)
     }

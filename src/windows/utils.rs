@@ -32,7 +32,7 @@ use windows::{
     core::{HRESULT, Interface, PCWSTR, s, w},
 };
 
-use crate::{Frame, XCapError, error::XCapResult};
+use crate::{XCapError, error::XCapResult, video_recorder::Frame};
 
 pub(super) fn get_build_number() -> u32 {
     unsafe {

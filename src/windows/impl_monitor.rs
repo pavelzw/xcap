@@ -1,4 +1,7 @@
-use std::{mem, ptr, sync::mpsc::Receiver};
+use std::{mem, ptr};
+
+#[cfg(feature = "video-recorder")]
+use std::sync::mpsc::Receiver;
 
 use image::RgbaImage;
 use scopeguard::guard;
@@ -19,16 +22,18 @@ use windows::{
     core::{BOOL, HRESULT, PCWSTR, s, w},
 };
 
-use crate::{
-    error::{XCapError, XCapResult},
-    video_recorder::Frame,
-};
+use crate::error::{XCapError, XCapResult};
+
+#[cfg(feature = "video-recorder")]
+use crate::video_recorder::Frame;
 
 use super::{
     capture::capture_monitor,
-    impl_video_recorder::ImplVideoRecorder,
     utils::{get_monitor_config, get_process_is_dpi_awareness, load_library},
 };
+
+#[cfg(feature = "video-recorder")]
+use super::impl_video_recorder::ImplVideoRecorder;
 
 // A 函数与 W 函数区别
 // https://learn.microsoft.com/zh-cn/windows/win32/learnwin32/working-with-strings
@@ -287,6 +292,7 @@ impl ImplMonitor {
         Ok(image)
     }
 
+    #[cfg(feature = "video-recorder")]
     pub fn video_recorder(&self) -> XCapResult<(ImplVideoRecorder, Receiver<Frame>)> {
         ImplVideoRecorder::new(self.h_monitor)
     }

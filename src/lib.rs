@@ -25,5 +25,7 @@ pub use error::{XCapError, XCapResult};
 pub use monitor::Monitor;
 pub use window::Window;
 
+#[cfg(feature = "video-recorder")]
 pub use video_recorder::Frame;
+#[cfg(feature = "video-recorder")]
 pub use video_recorder::VideoRecorder;

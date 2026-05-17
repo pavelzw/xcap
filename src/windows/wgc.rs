@@ -32,8 +32,8 @@ use windows::{
 };
 
 use crate::{
-    Frame,
     error::{XCapError, XCapResult},
+    video_recorder::Frame,
 };
 
 use super::utils::{create_d3d_device, texture_to_frame};

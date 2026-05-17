@@ -16,7 +16,9 @@ resolver = "2"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
+default = ["video-recorder"]
 image = ["image/default"]
+video-recorder = ["dep:pipewire"]
 wgc = [
     "windows/Graphics_Capture",
     "windows/Graphics_DirectX_Direct3D11",
@@ -71,10 +73,14 @@ url = "2.5"
 zbus = "5.6"
 rand = "0.9"
 serde = "1.0"
-pipewire = "0.9"
+pipewire = { version = "0.9", optional = true }
 libwayshot-xcap = "0.3"
 percent-encoding = "2.3"
 xcb = { version = "1.5", features = ["randr"] }
+
+[[example]]
+name = "monitor_record"
+required-features = ["video-recorder"]
 
 [dev-dependencies]
 fs_extra = "1.3"

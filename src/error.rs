@@ -46,7 +46,7 @@ pub enum XCapError {
     #[cfg(target_os = "linux")]
     #[error(transparent)]
     ZbusZvariantError(#[from] zbus::zvariant::Error),
-    #[cfg(target_os = "linux")]
+    #[cfg(all(target_os = "linux", feature = "video-recorder"))]
     #[error(transparent)]
     PipewireError(#[from] pipewire::Error),
 

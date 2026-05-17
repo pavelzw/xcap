@@ -1,7 +1,11 @@
 use std::sync::{Condvar, Mutex};
 
-use crate::{XCapResult, platform::impl_video_recorder::ImplVideoRecorder};
+use crate::XCapResult;
 
+#[cfg(feature = "video-recorder")]
+use crate::platform::impl_video_recorder::ImplVideoRecorder;
+
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct Frame {
     pub width: u32,
@@ -10,6 +14,7 @@ pub struct Frame {
 }
 
 impl Frame {
+    #[allow(dead_code)]
     pub fn new(width: u32, height: u32, raw: Vec<u8>) -> Self {
         Self { width, height, raw }
     }
@@ -56,11 +61,13 @@ impl RecorderWaker {
     }
 }
 
+#[cfg(feature = "video-recorder")]
 #[derive(Debug, Clone)]
 pub struct VideoRecorder {
     impl_video_recorder: ImplVideoRecorder,
 }
 
+#[cfg(feature = "video-recorder")]
 impl VideoRecorder {
     pub(crate) fn new(impl_video_recorder: ImplVideoRecorder) -> VideoRecorder {
         VideoRecorder {
@@ -69,6 +76,7 @@ impl VideoRecorder {
     }
 }
 
+#[cfg(feature = "video-recorder")]
 impl VideoRecorder {
     pub fn start(&self) -> XCapResult<()> {
         self.impl_video_recorder.start()

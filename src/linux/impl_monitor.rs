@@ -1,4 +1,4 @@
-use std::{ffi::CStr, sync::mpsc::Receiver};
+use std::ffi::CStr;
 
 use image::RgbaImage;
 use xcb::{
@@ -10,19 +10,23 @@ use xcb::{
     x::{ATOM_ANY, ATOM_RESOURCE_MANAGER, ATOM_STRING, CURRENT_TIME, GetProperty},
 };
 
-use crate::{
-    error::{XCapError, XCapResult},
-    video_recorder::Frame,
-};
+use crate::error::{XCapError, XCapResult};
+
+#[cfg(feature = "video-recorder")]
+use std::sync::mpsc::Receiver;
+#[cfg(feature = "video-recorder")]
+use crate::video_recorder::Frame;
 
 use super::{
     capture::{capture_monitor, capture_region},
-    impl_video_recorder::ImplVideoRecorder,
     utils::{
         get_atom, get_current_screen_buf, get_monitor_info_buf, get_xcb_connection_and_index,
         wayland_detect,
     },
 };
+
+#[cfg(feature = "video-recorder")]
+use super::impl_video_recorder::ImplVideoRecorder;
 
 #[derive(Debug, Clone)]
 pub(crate) struct ImplMonitor {
@@ -372,6 +376,7 @@ impl ImplMonitor {
         capture_region(self, x, y, width, height)
     }
 
+    #[cfg(feature = "video-recorder")]
     pub fn video_recorder(&self) -> XCapResult<(ImplVideoRecorder, Receiver<Frame>)> {
         ImplVideoRecorder::new(self.clone())
     }
